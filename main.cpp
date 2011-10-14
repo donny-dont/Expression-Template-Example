@@ -1,5 +1,6 @@
-#include "valarray_ver1.hpp"
 #include "timer.hpp"
+#include "valarray_ver1.hpp"
+#include "expression_template.hpp"
 #include <iostream>
 #include <emmintrin.h>
 #include <immintrin.h>
@@ -11,6 +12,40 @@
 double time_first_implementation(std::size_t size)
 {
 	using namespace first_implementation;
+
+	// Setup the arrays
+	valarray<float> v1x(size, 1.0f);
+	valarray<float> v1y(size, 2.0f);
+	valarray<float> v1z(size, 3.0f);
+	valarray<float> v1w(size, 4.0f);
+
+	valarray<float> v2x(size, 5.0f);
+	valarray<float> v2y(size, 6.0f);
+	valarray<float> v2z(size, 7.0f);
+	valarray<float> v2w(size, 8.0f);
+
+	valarray<float> dot_products(size);
+
+	// Begin the timer
+	timer clock;
+	clock.start();
+
+	// Compute the dot product
+	dot_products =
+		v1x * v2x +
+		v1y * v2y +
+		v1z * v2z +
+		v1w * v2w;
+
+	// Stop the timer
+	clock.stop();
+
+	return clock.elapsed_time();
+}
+
+double time_expression_template(std::size_t size)
+{
+	using namespace expression_template;
 
 	// Setup the arrays
 	valarray<float> v1x(size, 1.0f);
@@ -239,7 +274,7 @@ double time_avx_arrays(std::size_t elements)
 // Main
 //---------------------------------------------------------------------
 
-int main()
+int main(int argc, char *argv[])
 {
 	// Initialize the timer
 	timer::initialize();
@@ -252,16 +287,27 @@ int main()
 	double accum_second_implementation = 0.0;
 	double accum_third_implementation  = 0.0;
 
-	std::size_t size   = 50000;
-	std::size_t repeat =  5000;
+	std::size_t size = 1000000;
+	std::size_t repeat = 100;
+
+	if (argc >= 2)
+	{
+		size = atoi(argv[0]);
+		repeat = atoi(argv[1]);
+	}
+	else if (argc == 1)
+	{
+		size = atoi(argv[0]);
+	}
 
 	// Run the tests
 	for (std::size_t i = 0; i < repeat; ++i)
 	{
-		accum_float_arrays_time    += time_float_arrays(size);
-		accum_sse_arrays_time      += time_sse_arrays(size);
-		accum_avx_arrays_time      += time_avx_arrays(size);
-		accum_first_implementation += time_first_implementation(size);
+		accum_first_implementation  += time_first_implementation(size);
+		accum_float_arrays_time     += time_float_arrays(size);
+		accum_sse_arrays_time       += time_sse_arrays(size);
+//		accum_avx_arrays_time       += time_avx_arrays(size);
+		accum_second_implementation += time_expression_template(size);
 	}
 
 	// Print out results
