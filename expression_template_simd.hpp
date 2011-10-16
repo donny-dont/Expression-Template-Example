@@ -1,83 +1,21 @@
-#ifndef EXPRESSION_TEMPLATE_HPP_INCLUDED
-#define EXPRESSION_TEMPLATE_HPP_INCLUDED
+#ifndef EXPRESSION_TEMPLATE_SIMD_HPP_INCLUDED
+#define EXPRESSION_TEMPLATE_SIMD_HPP_INCLUDED
 
 #include <cassert>
 #include <cstddef>
 
-namespace expression_template
+namespace expression_template_simd
 {
 	template <typename Real>
-	class valarray_rep
-	{
-		public:
+	class valarray_rep_sse;
 
-			inline valarray_rep(std::size_t size)
-				: _size(size)
-				, _values(new Real[size])
-			{ }
-
-			inline valarray_rep(std::size_t size, Real value)
-				: _size(size)
-				, _values(new Real[size])
-			{
-				for (std::size_t i = 0; i < _size; ++i)
-					_values[i] = value;
-			}
-
-			inline ~valarray_rep()
-			{
-				delete[] _values;
-			}
-
-			inline valarray_rep(const valarray_rep& copy)
-				: _size(copy._size)
-				, _values(new Real[copy._size])
-			{
-				swap(copy) 
-			}
-
-			inline valarray_rep& operator= (const valarray_rep& copy)
-			{
-				swap(copy);
-
-				return *this;
-			}
-
-			inline std::size_t size() const
-			{
-				return _size;
-			}
-
-			inline Real operator[] (std::size_t i) const
-			{
-				return _values[i];
-			}
-
-			inline Real& operator[] (std::size_t i)
-			{
-				return _values[i];
-			}
-
-			inline void swap(const valarray_rep& copy)
-			{
-				assert(_size == copy._size);
-
-				for (std::size_t i = 0; i < _size; ++i)
-					_values[i] = copy._values[i];
-			}
-
-		private:
-
-			std::size_t _size;
-			Real* _values;
-
-	} ; // end class valarray_rep<Real>
-
-
-	template <typename Real, typename Rep = valarray_rep<Real> >
+	template <typename Real, typename Rep = valarray_rep_sse<Real> >
 	class valarray
 	{
 		public:
+
+			typedef Real value_type;
+			typedef typename Rep::element_type element_type;
 
 			explicit valarray(std::size_t size)
 				: _rep(size)
@@ -98,11 +36,10 @@ namespace expression_template
 			template <typename Real, typename Rep2>
 			inline valarray& operator= (const valarray<Real, Rep2>& copy)
 			{
-				assert(size() == copy.size());
-				std::size_t count = size();
+				assert(elements() == copy.elements());
 
-				for (std::size_t i = 0; i < count; ++i)
-					_rep[i] = copy[i];
+				for (std::size_t i = 0, count = elements(); i < count; ++i)
+					_rep(i) = copy(i);
 
 				return *this;
 			}
@@ -112,14 +49,24 @@ namespace expression_template
 				return _rep.size();
 			}
 
-			inline Real operator[] (std::size_t i) const
+			inline std::size_t elements() const
+			{
+				return _rep.elements();
+			}
+
+			inline value_type operator[] (std::size_t i) const
 			{
 				return _rep[i];
 			}
 
-			inline Real& operator[] (std::size_t i)
+			inline element_type operator() (std::size_t i) const
 			{
-				return _rep[i];
+				return _rep(i);
+			}
+
+			inline element_type& operator() (std::size_t i)
+			{
+				return _rep(i);
 			}
 
 			inline const Rep& rep() const
@@ -138,19 +85,27 @@ namespace expression_template
 	{
 		public:
 
+			typedef Real value_type;
+			typedef typename Op1::element_type element_type;
+
 			inline valarray_add(const Op1& a, const Op2& b)
 				: _op1(a)
 				, _op2(b)
 			{ }
 
-			inline Real operator[] (std::size_t i) const
+			inline element_type operator() (std::size_t i) const
 			{
-				return _op1[i] + _op2[i];
+				return add(_op1(i), _op2(i));
 			}
 
 			inline std::size_t size() const
 			{
 				return _op1.size();
+			}
+
+			inline std::size_t elements() const
+			{
+				return _op1.elements();
 			}
 
 		private:
@@ -165,19 +120,27 @@ namespace expression_template
 	{
 		public:
 
+			typedef Real value_type;
+			typedef typename Op1::element_type element_type;
+
 			inline valarray_mul(const Op1& a, const Op2& b)
 				: _op1(a)
 				, _op2(b)
 			{ }
 
-			inline Real operator[] (std::size_t i) const
+			inline element_type operator() (std::size_t i) const
 			{
-				return _op1[i] * _op2[i];
+				return mul(_op1(i), _op2(i));
 			}
 
 			inline std::size_t size() const
 			{
 				return _op1.size();
+			}
+
+			inline std::size_t elements() const
+			{
+				return _op1.elements();
 			}
 
 		private:
@@ -199,6 +162,6 @@ namespace expression_template
 		return valarray<Real, valarray_mul<Real, Lhs, Rhs> >(valarray_mul<Real, Lhs, Rhs>(lhs.rep(), rhs.rep()));
 	}
 
-} // end namespace expression_template
+} // end namespace expression_template_simd
 
-#endif // end EXPRESSION_TEMPLATE_HPP_INCLUDED
+#endif // end EXPRESSION_TEMPLATE_SIMD_HPP_INCLUDED

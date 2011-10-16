@@ -67,6 +67,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -80,9 +81,13 @@
     <ClCompile Include="timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="avx_array.hpp" />
+    <ClInclude Include="config.hpp" />
     <ClInclude Include="expression_template.hpp" />
+    <ClInclude Include="expression_template_simd.hpp" />
+    <ClInclude Include="naive_implementation.hpp" />
+    <ClInclude Include="sse_array.hpp" />
     <ClInclude Include="timer.hpp" />
-    <ClInclude Include="valarray_ver1.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

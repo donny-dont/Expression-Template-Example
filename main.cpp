@@ -1,17 +1,13 @@
-#include "timer.hpp"
-#include "valarray_ver1.hpp"
-#include "expression_template.hpp"
+#include "config.hpp"
 #include <iostream>
-#include <emmintrin.h>
-#include <immintrin.h>
 
 //---------------------------------------------------------------------
 // valarray implementations
 //---------------------------------------------------------------------
 
-double time_first_implementation(std::size_t size)
+double time_naive_array(std::size_t size)
 {
-	using namespace first_implementation;
+	using namespace naive_implementation;
 
 	// Setup the arrays
 	valarray<float> v1x(size, 1.0f);
@@ -43,7 +39,7 @@ double time_first_implementation(std::size_t size)
 	return clock.elapsed_time();
 }
 
-double time_expression_template(std::size_t size)
+double time_expr_template_float(std::size_t size)
 {
 	using namespace expression_template;
 
@@ -77,8 +73,94 @@ double time_expression_template(std::size_t size)
 	return clock.elapsed_time();
 }
 
+#ifdef USE_SSE
+
+double time_expr_template_sse(std::size_t size)
+{
+	using namespace expression_template_simd;
+	typedef valarray<float> valarray_float;
+
+	// Setup the arrays
+	valarray_float v1x(size, 1.0f);
+	valarray_float v1y(size, 2.0f);
+	valarray_float v1z(size, 3.0f);
+	valarray_float v1w(size, 4.0f);
+
+	valarray_float v2x(size, 5.0f);
+	valarray_float v2y(size, 6.0f);
+	valarray_float v2z(size, 7.0f);
+	valarray_float v2w(size, 8.0f);
+
+	valarray_float dot_products(size);
+
+	// Begin the timer
+	timer clock;
+	clock.start();
+
+	// Compute the dot product
+	dot_products =
+		v1x * v2x +
+		v1y * v2y +
+		v1z * v2z +
+		v1w * v2w;
+
+	// Stop the timer
+	clock.stop();
+
+	return clock.elapsed_time();
+}
+
+#else
+
+double time_expr_template_sse(std::size_t size) { return 0.0; }
+
+#endif
+
+#ifdef USE_AVX
+
+double time_expr_template_avx(std::size_t size)
+{
+	using namespace expression_template_simd;
+	typedef valarray<float, valarray_rep_avx<float> > valarray_float;
+
+	// Setup the arrays
+	valarray_float v1x(size, 1.0f);
+	valarray_float v1y(size, 2.0f);
+	valarray_float v1z(size, 3.0f);
+	valarray_float v1w(size, 4.0f);
+
+	valarray_float v2x(size, 5.0f);
+	valarray_float v2y(size, 6.0f);
+	valarray_float v2z(size, 7.0f);
+	valarray_float v2w(size, 8.0f);
+
+	valarray_float dot_products(size);
+
+	// Begin the timer
+	timer clock;
+	clock.start();
+
+	// Compute the dot product
+	dot_products =
+		v1x * v2x +
+		v1y * v2y +
+		v1z * v2z +
+		v1w * v2w;
+
+	// Stop the timer
+	clock.stop();
+
+	return clock.elapsed_time();
+}
+
+#else
+
+double time_expr_template_avx(std::size_t size) { return 0.0; }
+
+#endif
+
 //---------------------------------------------------------------------
-// Array implementations
+// C array implementations
 //---------------------------------------------------------------------
 
 double time_float_arrays(std::size_t size)
@@ -142,9 +224,11 @@ double time_float_arrays(std::size_t size)
 	return clock.elapsed_time();
 }
 
+#ifdef USE_SSE
+
 double time_sse_arrays(std::size_t elements)
 {
-	const std::size_t size = elements / 4 + (elements % 4 == 0) ? 0 : 1;
+	const std::size_t size = (elements / 4) + ((elements % 4 == 0) ? 0 : 1);
 	const std::size_t alignment  = sizeof(__m128);
 	const std::size_t array_size = alignment * size;
 
@@ -206,9 +290,17 @@ double time_sse_arrays(std::size_t elements)
 	return clock.elapsed_time();
 }
 
+#else
+
+double time_sse_arrays(std::size_t elements) { return 0.0; }
+
+#endif
+
+#ifdef USE_AVX
+
 double time_avx_arrays(std::size_t elements)
 {
-	const std::size_t size = elements / 8 + (elements % 8 == 0) ? 0 : 1;
+	const std::size_t size = (elements / 8) + ((elements % 8 == 0) ? 0 : 1);
 	const std::size_t alignment  = sizeof(__m256);
 	const std::size_t array_size = alignment * size;
 
@@ -270,6 +362,12 @@ double time_avx_arrays(std::size_t elements)
 	return clock.elapsed_time();
 }
 
+#else
+
+double time_avx_arrays(std::size_t elements) { return 0.0; }
+
+#endif
+
 //---------------------------------------------------------------------
 // Main
 //---------------------------------------------------------------------
@@ -280,22 +378,25 @@ int main(int argc, char *argv[])
 	timer::initialize();
 
 	// Initialize the total times
-	double accum_float_arrays_time     = 0.0;
-	double accum_sse_arrays_time       = 0.0;
-	double accum_avx_arrays_time       = 0.0;
-	double accum_first_implementation  = 0.0;
-	double accum_second_implementation = 0.0;
-	double accum_third_implementation  = 0.0;
+	double accum_float_arrays_time        = 0.0;
+	double accum_sse_arrays_time          = 0.0;
+	double accum_avx_arrays_time          = 0.0;
+	double accum_naive_array_time         = 0.0;
+	double accum_expr_template_float_time = 0.0;
+	double accum_expr_template_sse_time   = 0.0;
+	double accum_expr_template_avx_time   = 0.0;
 
+	// Get the size of the arrays and the
+	// number of repetitions
 	std::size_t size = 1000000;
 	std::size_t repeat = 100;
 
-	if (argc >= 2)
+	if (argc >= 3)
 	{
-		size = atoi(argv[0]);
-		repeat = atoi(argv[1]);
+		size = atoi(argv[1]);
+		repeat = atoi(argv[2]);
 	}
-	else if (argc == 1)
+	else if (argc == 2)
 	{
 		size = atoi(argv[0]);
 	}
@@ -303,33 +404,42 @@ int main(int argc, char *argv[])
 	// Run the tests
 	for (std::size_t i = 0; i < repeat; ++i)
 	{
-		accum_first_implementation  += time_first_implementation(size);
+		// C array implementations
 		accum_float_arrays_time     += time_float_arrays(size);
 		accum_sse_arrays_time       += time_sse_arrays(size);
-//		accum_avx_arrays_time       += time_avx_arrays(size);
-		accum_second_implementation += time_expression_template(size);
+		accum_avx_arrays_time       += time_avx_arrays(size);
+
+		// valarray implementations
+		accum_naive_array_time          += time_naive_array(size);
+		accum_expr_template_float_time  += time_expr_template_float(size);
+		accum_expr_template_sse_time    += time_expr_template_sse(size);
+		accum_expr_template_avx_time    += time_expr_template_avx(size);
 	}
 
 	// Print out results
 	std::cout << "Results for " << size << " elements computed " << repeat << " times\n";
+	std::cout.precision(12);
+	std::cout.setf(std::ios::fixed, std::ios::floatfield);
 
 	// Print out total times
 	std::cout << "\nTotal times\n";
 	std::cout << "------------------------\n";
-	std::cout << "Float array time: " << accum_float_arrays_time     << " secs\n";
-	std::cout << "  SSE array time: " << accum_sse_arrays_time       << " secs\n";
-	std::cout << "  AVX array time: " << accum_avx_arrays_time       << " secs\n";
-	std::cout << "1st attempt time: " << accum_first_implementation  << " secs\n";
-	std::cout << "2nd attempt time: " << accum_second_implementation << " secs\n";
-	std::cout << "3rd attempt time: " << accum_third_implementation  << " secs\n";
+	std::cout << "   Float array time: " << accum_float_arrays_time        << " secs\n";
+	std::cout << "     SSE array time: " << accum_sse_arrays_time          << " secs\n";
+	std::cout << "     AVX array time: " << accum_avx_arrays_time          << " secs\n";
+	std::cout << "Naive valarray time: " << accum_naive_array_time         << " secs\n";
+	std::cout << "Float valarray time: " << accum_expr_template_float_time << " secs\n";
+	std::cout << "  SSE valarray time: " << accum_expr_template_sse_time   << " secs\n";
+	std::cout << "  AVX valarray time: " << accum_expr_template_avx_time   << " secs\n";
 
 	// Print out average times
 	std::cout << "\nAverage times\n";
 	std::cout << "------------------------\n";
-	std::cout << "Float array time: " << accum_float_arrays_time     / repeat << " secs\n";
-	std::cout << "  SSE array time: " << accum_sse_arrays_time       / repeat << " secs\n";
-	std::cout << "  AVX array time: " << accum_avx_arrays_time       / repeat << " secs\n";
-	std::cout << "1st attempt time: " << accum_first_implementation  / repeat << " secs\n";
-	std::cout << "2nd attempt time: " << accum_second_implementation / repeat << " secs\n";
-	std::cout << "3rd attempt time: " << accum_third_implementation  / repeat << " secs\n";
+	std::cout << "   Float array time: " << accum_float_arrays_time        / repeat << " secs\n";
+	std::cout << "     SSE array time: " << accum_sse_arrays_time          / repeat << " secs\n";
+	std::cout << "     AVX array time: " << accum_avx_arrays_time          / repeat << " secs\n";
+	std::cout << "Naive valarray time: " << accum_naive_array_time         / repeat << " secs\n";
+	std::cout << "Float valarray time: " << accum_expr_template_float_time / repeat << " secs\n";
+	std::cout << "  SSE valarray time: " << accum_expr_template_sse_time   / repeat << " secs\n";
+	std::cout << "  AVX valarray time: " << accum_expr_template_avx_time   / repeat << " secs\n";
 }

@@ -1,10 +1,10 @@
-#ifndef VALARRAY_IMPL1_HPP_INCLUDED
-#define VALARRAY_IMPL1_HPP_INCLUDED
+#ifndef NAIVE_IMPLEMENTATION_HPP_INCLUDED
+#define NAIVE_IMPLEMENTATION_HPP_INCLUDED
 
 #include <cassert>
 #include <cstddef>
 
-namespace first_implementation
+namespace naive_implementation
 {
 	template <typename Real>
 	class valarray
@@ -85,6 +85,6 @@ namespace first_implementation
 
 	} ; // end class valarray<Real>
 
-} // end namespace first_implementation
+} // end namespace naive_implementation
 
-#endif // end VALARRAY_IMPL1_HPP_INCLUDED
+#endif // end NAIVE_IMPLEMENTATION_HPP_INCLUDED

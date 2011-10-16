@@ -1,7 +1,8 @@
-
-/expression.sdf
-/expression.vcxproj.filters
-/expression.vcxproj.user
 /Debug
 /Release
 /ipch
+*.sdf
+*.filters
+*.user
+*.suo
+*.opensdf
