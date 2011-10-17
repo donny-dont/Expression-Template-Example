@@ -1,24 +1,40 @@
 #ifndef TIMER_HPP_INCLUDED
 #define TIMER_HPP_INCLUDED
 
-#include <Windows.h>
+#include <cstdint>
+
+namespace time
+{
+	void initialize();
+
+	std::uint64_t get_time();
+}
 
 class timer
 {
 	public:
 
-		void start();
+		inline timer()
+		: _start_time(0)
+		, _stop_time(0)
+		{ }
 
-		void stop();
+		inline void start()
+		{
+			_start_time = time::get_time();
+		}
+
+		inline void stop()
+		{
+			_stop_time = time::get_time();
+		}
 
 		double elapsed_time() const;
 
-		static void initialize();
-
 	private:
 
-		LARGE_INTEGER _startTime;
-		LARGE_INTEGER _stopTime;
+		std::uint64_t _start_time;
+		std::uint64_t _stop_time;
 
 } ; // end class timer
 

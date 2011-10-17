@@ -1,6 +1,7 @@
 #ifndef AVX_ARRAY_HPP_INCLUDED
 #define AVX_ARRAY_HPP_INCLUDED
 
+#include <malloc.h>
 #include <cassert>
 #include <cstddef>
 #include <immintrin.h>
@@ -42,14 +43,14 @@ namespace expression_template_simd
 				: _size(size)
 				, _elements((size / element_size()) + ((size % element_size() == 0) ? 0 : 1))
 			{
-				 _values = (element_type*)_aligned_malloc(_elements * sizeof(element_type), alignment());
+				 _values = (element_type*)_mm_malloc(_elements * sizeof(element_type), alignment());
 			}
 
 			inline valarray_rep_avx(std::size_t size, value_type value)
 				: _size(size)
 				, _elements((size / element_size()) + ((size % element_size() == 0) ? 0 : 1))
 			{
-				 _values = (element_type*)_aligned_malloc(_elements * sizeof(element_type), alignment());
+				 _values = (element_type*)_mm_malloc(_elements * sizeof(element_type), alignment());
 
 				 const __m256 value_sse = _mm256_set1_ps(value);
 
@@ -59,14 +60,14 @@ namespace expression_template_simd
 
 			inline ~valarray_rep_avx()
 			{
-				_aligned_free(_values);
+				_mm_free(_values);
 			}
 
 			inline valarray_rep_avx(const valarray_rep_avx& copy)
 				: _size(copy._size)
 				, _elements(copy._elements)
 			{
-				 _values = (element_type*)_aligned_malloc(_elements, alignment());
+				 _values = (element_type*)_mm_malloc(_elements, alignment());
 
 				 swap(copy);
 			}

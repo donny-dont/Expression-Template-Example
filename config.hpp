@@ -4,7 +4,7 @@
 // Uncomment/comment to enable/disable SSE computations
 #define USE_SSE
 // Uncomment/comment to enable/disable AVX computations
-//#define USE_AVX
+#define USE_AVX
 
 #include "timer.hpp"
 #include "naive_implementation.hpp"

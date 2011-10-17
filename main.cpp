@@ -8,7 +8,7 @@
 int main(int argc, char *argv[])
 {
 	// Initialize the timer
-	timer::initialize();
+	time::initialize();
 
 	// Initialize the total times
 	double accum_float_arrays_time        = 0.0;
