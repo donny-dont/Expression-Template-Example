@@ -10,17 +10,22 @@ namespace expression_template_simd
 	template <typename Real>
 	class valarray_rep_avx;
 
-	__m256 add(const __m256& lhs, const __m256& rhs)
+	inline __m256 add(const __m256& lhs, const __m256& rhs)
 	{
 		return _mm256_add_ps(lhs, rhs);
 	}
 
-	__m256 mul(const __m256& lhs, const __m256& rhs)
+	inline __m256 mul(const __m256& lhs, const __m256& rhs)
 	{
 		return _mm256_mul_ps(lhs, rhs);
 	}
 
-	float get(const __m256& value, std::size_t i)
+	inline __m256 sqrt(const __m256& v)
+	{
+		return _mm256_sqrt_ps(v);
+	}
+
+	inline float get(const __m256& value, std::size_t i)
 	{
 		return value.m256_f32[i];
 	}

@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <cmath>
 
 namespace naive_implementation
 {
@@ -54,6 +55,18 @@ namespace naive_implementation
 				return _values[i];
 			}
 
+			inline Real& operator[] (std::size_t i)
+			{
+				assert(i < _size);
+
+				return _values[i];
+			}
+
+			inline std::size_t size() const
+			{
+				return _size;
+			}
+
 			inline valarray operator+ (const valarray& rhs) const
 			{
 				assert(_size == rhs._size);
@@ -84,6 +97,18 @@ namespace naive_implementation
 			Real* _values;
 
 	} ; // end class valarray<Real>
+
+	template <typename Real>
+	inline valarray<Real> sqrt(const valarray<Real>& value)
+	{
+		const std::size_t size = value.size();
+		valarray<Real> result(size);
+
+		for (std::size_t i = 0; i < size; ++i)
+			result[i] = std::sqrt(value[i]);
+
+		return result;
+	}
 
 } // end namespace naive_implementation
 

@@ -1,6 +1,8 @@
 #ifndef SSE_ARRAY_HPP_INCLUDED
 #define SSE_ARRAY_HPP_INCLUDED
 
+//#define USE_NEWTON_RAPHSON_ITERATION
+
 #include <cassert>
 #include <cstddef>
 #include <emmintrin.h>
@@ -10,17 +12,22 @@ namespace expression_template_simd
 	template <typename Real>
 	class valarray_rep_sse;
 
-	__m128 add(const __m128& lhs, const __m128& rhs)
+	inline __m128 add(const __m128& lhs, const __m128& rhs)
 	{
 		return _mm_add_ps(lhs, rhs);
 	}
 
-	__m128 mul(const __m128& lhs, const __m128& rhs)
+	inline __m128 mul(const __m128& lhs, const __m128& rhs)
 	{
 		return _mm_mul_ps(lhs, rhs);
 	}
 
-	float get(const __m128& value, std::size_t i)
+	inline __m128 sqrt(const __m128& v)
+	{
+		return _mm_sqrt_ps(v);
+	}
+
+	inline float get(const __m128& value, std::size_t i)
 	{
 		return value.m128_f32[i];
 	}

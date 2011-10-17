@@ -1,8 +1,9 @@
-/Debug
-/Release
+/obj
 /ipch
+*.exe
 *.sdf
 *.filters
 *.user
 *.suo
 *.opensdf
+*.tmp

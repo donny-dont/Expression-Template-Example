@@ -187,16 +187,47 @@ namespace expression_template
 
 	} ; // end valarray_mul<Real, Op1, Op2>
 
+	template <typename Real, typename Op>
+	class valarray_sqrt
+	{
+		public:
+
+			inline valarray_sqrt(const Op& a)
+				: _op(a)
+			{ }
+
+			inline Real operator[] (std::size_t i) const
+			{
+				return std::sqrt(_op[i]);
+			}
+
+			inline std::size_t size() const
+			{
+				return _op.size();
+			}
+
+		private:
+
+			const Op& _op;
+
+	} ; // end valarray_sqrt<Real, Op>
+
 	template <typename Real, typename Lhs, typename Rhs>
-	valarray<Real, valarray_add<Real, Lhs, Rhs> > operator+ (const valarray<Real, Lhs>& lhs, const valarray<Real, Rhs>& rhs)
+	inline valarray<Real, valarray_add<Real, Lhs, Rhs> > operator+ (const valarray<Real, Lhs>& lhs, const valarray<Real, Rhs>& rhs)
 	{
 		return valarray<Real, valarray_add<Real, Lhs, Rhs> >(valarray_add<Real, Lhs, Rhs>(lhs.rep(), rhs.rep()));
 	}
 
 	template <typename Real, typename Lhs, typename Rhs>
-	valarray<Real, valarray_mul<Real, Lhs, Rhs> > operator* (const valarray<Real, Lhs>& lhs, const valarray<Real, Rhs>& rhs)
+	inline valarray<Real, valarray_mul<Real, Lhs, Rhs> > operator* (const valarray<Real, Lhs>& lhs, const valarray<Real, Rhs>& rhs)
 	{
 		return valarray<Real, valarray_mul<Real, Lhs, Rhs> >(valarray_mul<Real, Lhs, Rhs>(lhs.rep(), rhs.rep()));
+	}
+
+	template <typename Real, typename Op>
+	inline valarray<Real, valarray_sqrt<Real, Op> > sqrt(const valarray<Real, Op>& value)
+	{
+		return valarray<Real, valarray_sqrt<Real, Op> >(valarray_sqrt<Real, Op>(value.rep()));
 	}
 
 } // end namespace expression_template
