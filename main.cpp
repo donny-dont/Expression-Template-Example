@@ -8,7 +8,7 @@
 int main(int argc, char *argv[])
 {
 	// Initialize the timer
-	time::initialize();
+	system_time::initialize();
 
 	// Initialize the total times
 	double accum_float_arrays_time        = 0.0;
@@ -75,4 +75,7 @@ int main(int argc, char *argv[])
 	std::cout << "Float valarray time: " << accum_expr_template_float_time / repeat << " secs\n";
 	std::cout << "  SSE valarray time: " << accum_expr_template_sse_time   / repeat << " secs\n";
 	std::cout << "  AVX valarray time: " << accum_expr_template_avx_time   / repeat << " secs\n";
+
+	// Terminate the timer
+	system_time::terminate();
 }

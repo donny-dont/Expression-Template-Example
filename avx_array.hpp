@@ -21,7 +21,7 @@ namespace expression_template_simd
 		return _mm256_mul_ps(lhs, rhs);
 	}
 
-	inline __m256 sqrt(const __m256& v)
+	inline __m256 square_root(const __m256& v)
 	{
 		return _mm256_sqrt_ps(v);
 	}

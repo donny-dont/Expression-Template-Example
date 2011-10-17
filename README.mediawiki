@@ -1,0 +1,7 @@
+== Expression Templates with SIMD ==
+
+An example implementation of [http://en.wikipedia.org/wiki/Expression_templates Expression Templates]. Includes implementations for floating point values, and SIMD types. SIMD implementations for SSE and AVX are provided.
+
+The source code itself is public domain.
+
+Information on the implementation can be found in the accompanying article on #AltDevBlogADay.

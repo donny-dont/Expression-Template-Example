@@ -1,13 +1,15 @@
 #ifndef TIMER_HPP_INCLUDED
 #define TIMER_HPP_INCLUDED
 
-#include <cstdint>
+#include <stdint.h>
 
-namespace time
+namespace system_time
 {
 	void initialize();
+	
+	void terminate();
 
-	std::uint64_t get_time();
+	uint64_t get_time();
 }
 
 class timer
@@ -21,20 +23,20 @@ class timer
 
 		inline void start()
 		{
-			_start_time = time::get_time();
+			_start_time = system_time::get_time();
 		}
 
 		inline void stop()
 		{
-			_stop_time = time::get_time();
+			_stop_time = system_time::get_time();
 		}
 
 		double elapsed_time() const;
 
 	private:
 
-		std::uint64_t _start_time;
-		std::uint64_t _stop_time;
+		uint64_t _start_time;
+		uint64_t _stop_time;
 
 } ; // end class timer
 

@@ -33,7 +33,7 @@ namespace expression_template
 				: _size(copy._size)
 				, _values(new Real[copy._size])
 			{
-				swap(copy) 
+				swap(copy);
 			}
 
 			inline valarray_rep& operator= (const valarray_rep& copy)
@@ -95,7 +95,7 @@ namespace expression_template
 				: _rep(copy._rep)
 			{ }
 
-			template <typename Real, typename Rep2>
+			template <typename Rep2>
 			inline valarray& operator= (const valarray<Real, Rep2>& copy)
 			{
 				assert(size() == copy.size());

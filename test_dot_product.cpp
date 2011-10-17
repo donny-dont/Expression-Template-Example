@@ -232,15 +232,15 @@ double time_sse_arrays(std::size_t elements)
 	const std::size_t array_size = alignment * size;
 
 	// Setup the arrays
-	__m128* v1x = (__m128*)_aligned_malloc(array_size, alignment);
-	__m128* v1y = (__m128*)_aligned_malloc(array_size, alignment);
-	__m128* v1z = (__m128*)_aligned_malloc(array_size, alignment);
-	__m128* v1w = (__m128*)_aligned_malloc(array_size, alignment);
+	__m128* v1x = (__m128*)_mm_malloc(array_size, alignment);
+	__m128* v1y = (__m128*)_mm_malloc(array_size, alignment);
+	__m128* v1z = (__m128*)_mm_malloc(array_size, alignment);
+	__m128* v1w = (__m128*)_mm_malloc(array_size, alignment);
 
-	__m128* v2x = (__m128*)_aligned_malloc(array_size, alignment);
-	__m128* v2y = (__m128*)_aligned_malloc(array_size, alignment);
-	__m128* v2z = (__m128*)_aligned_malloc(array_size, alignment);
-	__m128* v2w = (__m128*)_aligned_malloc(array_size, alignment);
+	__m128* v2x = (__m128*)_mm_malloc(array_size, alignment);
+	__m128* v2y = (__m128*)_mm_malloc(array_size, alignment);
+	__m128* v2z = (__m128*)_mm_malloc(array_size, alignment);
+	__m128* v2w = (__m128*)_mm_malloc(array_size, alignment);
 	
 	for (std::size_t i = 0; i < size; ++i)
 	{
@@ -255,7 +255,7 @@ double time_sse_arrays(std::size_t elements)
 		v2w[i] = _mm_set1_ps(8.0f);
 	}
 	
-	__m128* dot_products = (__m128*)_aligned_malloc(array_size, alignment);
+	__m128* dot_products = (__m128*)_mm_malloc(array_size, alignment);
 
 	// Begin the timer
 	timer clock;
@@ -274,17 +274,17 @@ double time_sse_arrays(std::size_t elements)
 	clock.stop();
 
 	// Cleanup the arrays
-	_aligned_free(dot_products);
+	_mm_free(dot_products);
 
-	_aligned_free(v1x);
-	_aligned_free(v1y);
-	_aligned_free(v1z);
-	_aligned_free(v1w);
+	_mm_free(v1x);
+	_mm_free(v1y);
+	_mm_free(v1z);
+	_mm_free(v1w);
 
-	_aligned_free(v2x);
-	_aligned_free(v2y);
-	_aligned_free(v2z);
-	_aligned_free(v2w);
+	_mm_free(v2x);
+	_mm_free(v2y);
+	_mm_free(v2z);
+	_mm_free(v2w);
 
 	return clock.elapsed_time();
 }
@@ -304,15 +304,15 @@ double time_avx_arrays(std::size_t elements)
 	const std::size_t array_size = alignment * size;
 
 	// Setup the arrays
-	__m256* v1x = (__m256*)_aligned_malloc(array_size, alignment);
-	__m256* v1y = (__m256*)_aligned_malloc(array_size, alignment);
-	__m256* v1z = (__m256*)_aligned_malloc(array_size, alignment);
-	__m256* v1w = (__m256*)_aligned_malloc(array_size, alignment);
+	__m256* v1x = (__m256*)_mm_malloc(array_size, alignment);
+	__m256* v1y = (__m256*)_mm_malloc(array_size, alignment);
+	__m256* v1z = (__m256*)_mm_malloc(array_size, alignment);
+	__m256* v1w = (__m256*)_mm_malloc(array_size, alignment);
 
-	__m256* v2x = (__m256*)_aligned_malloc(array_size, alignment);
-	__m256* v2y = (__m256*)_aligned_malloc(array_size, alignment);
-	__m256* v2z = (__m256*)_aligned_malloc(array_size, alignment);
-	__m256* v2w = (__m256*)_aligned_malloc(array_size, alignment);
+	__m256* v2x = (__m256*)_mm_malloc(array_size, alignment);
+	__m256* v2y = (__m256*)_mm_malloc(array_size, alignment);
+	__m256* v2z = (__m256*)_mm_malloc(array_size, alignment);
+	__m256* v2w = (__m256*)_mm_malloc(array_size, alignment);
 	
 	for (std::size_t i = 0; i < size; ++i)
 	{
@@ -327,7 +327,7 @@ double time_avx_arrays(std::size_t elements)
 		v2w[i] = _mm256_set1_ps(8.0f);
 	}
 	
-	__m256* dot_products = (__m256*)_aligned_malloc(array_size, alignment);
+	__m256* dot_products = (__m256*)_mm_malloc(array_size, alignment);
 
 	// Begin the timer
 	timer clock;
@@ -346,17 +346,17 @@ double time_avx_arrays(std::size_t elements)
 	clock.stop();
 
 	// Cleanup the arrays
-	_aligned_free(dot_products);
+	_mm_free(dot_products);
 
-	_aligned_free(v1x);
-	_aligned_free(v1y);
-	_aligned_free(v1z);
-	_aligned_free(v1w);
+	_mm_free(v1x);
+	_mm_free(v1y);
+	_mm_free(v1z);
+	_mm_free(v1w);
 
-	_aligned_free(v2x);
-	_aligned_free(v2y);
-	_aligned_free(v2z);
-	_aligned_free(v2w);
+	_mm_free(v2x);
+	_mm_free(v2y);
+	_mm_free(v2z);
+	_mm_free(v2w);
 
 	return clock.elapsed_time();
 }

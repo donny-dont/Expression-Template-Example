@@ -33,7 +33,7 @@ namespace expression_template_simd
 				: _rep(copy._rep)
 			{ }
 
-			template <typename Real, typename Rep2>
+			template <typename Rep2>
 			inline valarray& operator= (const valarray<Real, Rep2>& copy)
 			{
 				assert(elements() == copy.elements());
@@ -164,7 +164,7 @@ namespace expression_template_simd
 
 			inline element_type operator() (std::size_t i) const
 			{
-				return sqrt(_op(i));
+				return square_root(_op(i));
 			}
 
 			inline std::size_t size() const

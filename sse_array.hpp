@@ -1,9 +1,9 @@
 #ifndef SSE_ARRAY_HPP_INCLUDED
 #define SSE_ARRAY_HPP_INCLUDED
 
-//#define USE_NEWTON_RAPHSON_ITERATION
-
+#ifdef _WIN32
 #include <malloc.h>
+#endif
 #include <cassert>
 #include <cstddef>
 #include <emmintrin.h>
@@ -23,14 +23,18 @@ namespace expression_template_simd
 		return _mm_mul_ps(lhs, rhs);
 	}
 
-	inline __m128 sqrt(const __m128& v)
+	inline __m128 square_root(const __m128& v)
 	{
 		return _mm_sqrt_ps(v);
 	}
 
 	inline float get(const __m128& value, std::size_t i)
 	{
+	#ifdef _WIN32
 		return value.m128_f32[i];
+	#else
+		return 0.0f;
+	#endif
 	}
 
 	template <>
