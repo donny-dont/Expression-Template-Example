@@ -1,35 +1,43 @@
 #ifndef AVX_ARRAY_HPP_INCLUDED
 #define AVX_ARRAY_HPP_INCLUDED
 
+#ifdef _WIN32
 #include <malloc.h>
+#endif
 #include <cassert>
 #include <cstddef>
 #include <immintrin.h>
 
 namespace expression_template_simd
 {
-	template <typename Real>
-	class valarray_rep_avx;
 
-	inline __m256 add(const __m256& lhs, const __m256& rhs)
+	INLINE __m256 add(const __m256& lhs, const __m256& rhs)
 	{
 		return _mm256_add_ps(lhs, rhs);
 	}
 
-	inline __m256 mul(const __m256& lhs, const __m256& rhs)
+	INLINE __m256 mul(const __m256& lhs, const __m256& rhs)
 	{
 		return _mm256_mul_ps(lhs, rhs);
 	}
 
-	inline __m256 square_root(const __m256& v)
+	INLINE __m256 madd(const __m256& a, const __m256& b, const __m256& c)
+	{
+		return _mm256_add_ps(a, _mm256_mul_ps(b, c));
+	}
+
+	INLINE __m256 square_root(const __m256& v)
 	{
 		return _mm256_sqrt_ps(v);
 	}
 
-	inline float get(const __m256& value, std::size_t i)
+	INLINE float get(const __m256& value, std::size_t i)
 	{
 		return value.m256_f32[i];
 	}
+
+	template <typename Real>
+	class valarray_rep_avx;
 
 	template <>
 	class valarray_rep_avx<float>
@@ -39,14 +47,14 @@ namespace expression_template_simd
 			typedef float value_type;
 			typedef __m256 element_type;
 
-			inline valarray_rep_avx(std::size_t size)
+			INLINE valarray_rep_avx(std::size_t size)
 				: _size(size)
 				, _elements((size / element_size()) + ((size % element_size() == 0) ? 0 : 1))
 			{
 				 _values = (element_type*)_mm_malloc(_elements * sizeof(element_type), alignment());
 			}
 
-			inline valarray_rep_avx(std::size_t size, value_type value)
+			INLINE valarray_rep_avx(std::size_t size, value_type value)
 				: _size(size)
 				, _elements((size / element_size()) + ((size % element_size() == 0) ? 0 : 1))
 			{
@@ -58,12 +66,12 @@ namespace expression_template_simd
 					 _values[i] = value_sse;
 			}
 
-			inline ~valarray_rep_avx()
+			INLINE ~valarray_rep_avx()
 			{
 				_mm_free(_values);
 			}
 
-			inline valarray_rep_avx(const valarray_rep_avx& copy)
+			INLINE valarray_rep_avx(const valarray_rep_avx& copy)
 				: _size(copy._size)
 				, _elements(copy._elements)
 			{
@@ -72,28 +80,28 @@ namespace expression_template_simd
 				 swap(copy);
 			}
 
-			inline valarray_rep_avx& operator= (const valarray_rep_avx& copy)
+			INLINE valarray_rep_avx& operator= (const valarray_rep_avx& copy)
 			{
 				swap(copy);
 
 				return *this;
 			}
 
-			inline element_type operator() (std::size_t i) const
+			INLINE element_type operator() (std::size_t i) const
 			{
 				assert(i < _elements);
 
 				return _values[i];
 			}
 
-			inline element_type& operator() (std::size_t i)
+			INLINE element_type& operator() (std::size_t i)
 			{
 				assert(i < _elements);
 
 				return _values[i];
 			}
 
-			inline float operator[] (std::size_t i) const
+			INLINE float operator[] (std::size_t i) const
 			{
 				assert(i < _size);
 
@@ -103,27 +111,27 @@ namespace expression_template_simd
 				return get(_values[element], index);
 			}
 
-			inline std::size_t size() const
+			INLINE std::size_t size() const
 			{
 				return _size;
 			}
 
-			inline std::size_t elements() const
+			INLINE std::size_t elements() const
 			{
 				return _elements;
 			}
 
-			inline static std::size_t alignment()
+			INLINE static std::size_t alignment()
 			{
 				return sizeof(element_type);
 			}
 
-			inline static std::size_t element_size()
+			INLINE static std::size_t element_size()
 			{
 				return sizeof(element_type) / sizeof(value_type);
 			}
 
-			inline void swap(const valarray_rep_avx& copy)
+			INLINE void swap(const valarray_rep_avx& copy)
 			{
 				assert(_size == copy._size);
 

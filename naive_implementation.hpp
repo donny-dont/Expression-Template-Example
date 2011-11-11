@@ -12,12 +12,12 @@ namespace naive_implementation
 	{
 		public:
 
-			inline valarray(std::size_t size)
+			INLINE valarray(std::size_t size)
 			: _size(size)
 			, _values(new Real[size])
 			{ }
 
-			inline valarray(std::size_t size, Real value)
+			INLINE valarray(std::size_t size, Real value)
 			: _size(size)
 			, _values(new Real[size])
 			{
@@ -25,12 +25,12 @@ namespace naive_implementation
 					_values[i] = value;
 			}
 
-			inline ~valarray()
+			INLINE ~valarray()
 			{
 				delete[] _values;
 			}
 
-			inline valarray(const valarray& copy)
+			INLINE valarray(const valarray& copy)
 				: _size(copy._size)
 				, _values(new Real[copy._size])
 			{
@@ -38,7 +38,7 @@ namespace naive_implementation
 					_values[i] = copy._values[i];
 			}
 
-			inline valarray& operator= (const valarray& copy)
+			INLINE valarray& operator= (const valarray& copy)
 			{
 				assert(_size == copy._size);
 
@@ -48,26 +48,26 @@ namespace naive_implementation
 				return *this;
 			}
 
-			inline Real operator[] (std::size_t i) const
+			INLINE Real operator[] (std::size_t i) const
 			{
 				assert(i < _size);
 
 				return _values[i];
 			}
 
-			inline Real& operator[] (std::size_t i)
+			INLINE Real& operator[] (std::size_t i)
 			{
 				assert(i < _size);
 
 				return _values[i];
 			}
 
-			inline std::size_t size() const
+			INLINE std::size_t size() const
 			{
 				return _size;
 			}
 
-			inline valarray operator+ (const valarray& rhs) const
+			INLINE valarray operator+ (const valarray& rhs) const
 			{
 				assert(_size == rhs._size);
 
@@ -79,7 +79,7 @@ namespace naive_implementation
 				return result;
 			}
 
-			inline valarray operator* (const valarray& rhs) const
+			INLINE valarray operator* (const valarray& rhs) const
 			{
 				assert(_size == rhs._size);
 
@@ -99,7 +99,7 @@ namespace naive_implementation
 	} ; // end class valarray<Real>
 
 	template <typename Real>
-	inline valarray<Real> sqrt(const valarray<Real>& value)
+	INLINE valarray<Real> sqrt(const valarray<Real>& value)
 	{
 		const std::size_t size = value.size();
 		valarray<Real> result(size);
