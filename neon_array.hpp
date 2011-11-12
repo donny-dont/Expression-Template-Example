@@ -1,80 +1,80 @@
-#ifndef SSE_ARRAY_HPP_INCLUDED
-#define SSE_ARRAY_HPP_INCLUDED
+#ifndef NEON_ARRAY_HPP_INCLUDED
+#define NEON_ARRAY_HPP_INCLUDED
 
 #ifdef _WIN32
 #include <malloc.h>
 #endif
 #include <cassert>
 #include <cstddef>
-#include <emmintrin.h>
+#include <arm_neon.h>
 
 namespace expression_template_simd
 {
 	template <typename Real>
-	class valarray_rep_sse;
+	class valarray_rep_neon;
 
-	INLINE __m128 add(const __m128& lhs, const __m128& rhs)
+	INLINE float32x4_t add(const float32x4_t& lhs, const float32x4_t& rhs)
 	{
-		return _mm_add_ps(lhs, rhs);
+		return vaddq_f32(lhs, rhs);
 	}
 
-	INLINE __m128 mul(const __m128& lhs, const __m128& rhs)
+	INLINE float32x4_t mul(const float32x4_t& lhs, const float32x4_t& rhs)
 	{
-		return _mm_mul_ps(lhs, rhs);
+		return vmulq_f32(lhs, rhs);
 	}
 
-	INLINE __m128 madd(const __m128& a, const __m128& b, const __m128& c)
+	INLINE float32x4_t madd(const float32x4_t& a, const float32x4_t& b, const float32x4_t& c)
 	{
-		return _mm_add_ps(a, _mm_mul_ps(b, c));
+		return vmlaq_f32(a, b, c);
 	}
 
-	INLINE __m128 square_root(const __m128& v)
+	INLINE float32x4_t square_root(const float32x4_t& v)
 	{
-		return _mm_mul_ps(v, _mm_rsqrt_ps(v));
+		return vmulq_f32(v, vrsqrteq_f32(v));
 	}
 
-	INLINE float get(const __m128& value, std::size_t i)
+	INLINE float get(const float32x4_t& value, std::size_t i)
 	{
 	#ifdef _WIN32
-		return value.m128_f32[i];
+		return value.n128_f32[i];
 	#else
 		return 0.0f;
 	#endif
 	}
 
 	template <>
-	class valarray_rep_sse<float>
+	class valarray_rep_neon<float>
 	{
 		public:
 
 			typedef float value_type;
-			typedef __m128 element_type;
+			typedef float32x4_t element_type;
 
-			INLINE valarray_rep_sse(std::size_t size)
+			INLINE valarray_rep_neon(std::size_t size)
 				: _size(size)
 				, _elements((size / element_size()) + ((size % element_size() == 0) ? 0 : 1))
 			{
 				 _values = (element_type*)_mm_malloc(_elements * sizeof(element_type), alignment());
 			}
 
-			INLINE valarray_rep_sse(std::size_t size, value_type value)
+			INLINE valarray_rep_neon(std::size_t size, value_type value)
 				: _size(size)
 				, _elements((size / element_size()) + ((size % element_size() == 0) ? 0 : 1))
 			{
 				 _values = (element_type*)_mm_malloc(_elements * sizeof(element_type), alignment());
 
-				 const __m128 value_sse = _mm_set1_ps(value);
+				 const float32x4_t value_sse = vdupq_n_f32(value);
 
 				 for (std::size_t i = 0; i < _elements; ++i)
 					 _values[i] = value_sse;
 			}
 
-			INLINE ~valarray_rep_sse()
+			INLINE ~valarray_rep_neon()
 			{
 				_mm_free(_values);
 			}
 
-			INLINE valarray_rep_sse(const valarray_rep_sse& copy)
+			INLINE valarray_rep_neon(const valarray_rep_neon& copy)
 				: _size(copy._size)
 				, _elements(copy._elements)
 			{
@@ -83,7 +83,7 @@ namespace expression_template_simd
 				 swap(copy);
 			}
 
-			INLINE valarray_rep_sse& operator= (const valarray_rep_sse& copy)
+			INLINE valarray_rep_neon& operator= (const valarray_rep_neon& copy)
 			{
 				swap(copy);
 
@@ -134,7 +134,7 @@ namespace expression_template_simd
 				return sizeof(element_type) / sizeof(value_type);
 			}
 
-			INLINE void swap(const valarray_rep_sse& copy)
+			INLINE void swap(const valarray_rep_neon& copy)
 			{
 				assert(_size == copy._size);
 
@@ -152,4 +152,4 @@ namespace expression_template_simd
 
 } // end namespace expression_template_simd
 
-#endif // end SSE_ARRAY_HPP_INCLUDED
+#endif // end NEON_ARRAY_HPP_INCLUDED

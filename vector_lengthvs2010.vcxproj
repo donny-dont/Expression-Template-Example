@@ -11,8 +11,8 @@
 		</ProjectConfiguration>
 	</ItemGroup>
 	<PropertyGroup Label="Globals">
-		<ProjectGuid>{382EFACA-62AE-6642-9B6D-5D8B7E0EAAD7}</ProjectGuid>
-		<RootNamespace>vector_length</RootNamespace>
+		<ProjectGuid>{55349F93-8353-D349-8D39-341E1D4DDBE8}</ProjectGuid>
+		<RootNamespace>vector_lengthvs2010</RootNamespace>
 		<Keyword>Win32Proj</Keyword>
 	</PropertyGroup>
 	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -40,12 +40,12 @@
 	<PropertyGroup>
 		<_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
 		<OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\</OutDir>
-		<IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">obj\Debug\vector_length\</IntDir>
-		<TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vector_length</TargetName>
+		<IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">obj\Debug\vector_lengthvs2010\</IntDir>
+		<TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vector_lengthvs2010</TargetName>
 		<LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
 		<OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\</OutDir>
-		<IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">obj\Release\vector_length\</IntDir>
-		<TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vector_length</TargetName>
+		<IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">obj\Release\vector_lengthvs2010\</IntDir>
+		<TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vector_lengthvs2010</TargetName>
 		<LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
 	</PropertyGroup>
 	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -64,11 +64,11 @@
 			<PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 		</ResourceCompile>
 		<Link>
-			<OutputFile>$(OutDir)vector_length.exe</OutputFile>
+			<OutputFile>$(OutDir)vector_lengthvs2010.exe</OutputFile>
 			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 			<SubSystem>Console</SubSystem>
 			<GenerateDebugInformation>true</GenerateDebugInformation>
-			<ProgramDataBaseFileName>$(OutDir)vector_length.pdb</ProgramDataBaseFileName>
+			<ProgramDataBaseFileName>$(OutDir)vector_lengthvs2010.pdb</ProgramDataBaseFileName>
 			<EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
 			<TargetMachine>MachineX86</TargetMachine>
 		</Link>
@@ -89,7 +89,7 @@
 			<PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 		</ResourceCompile>
 		<Link>
-			<OutputFile>$(OutDir)vector_length.exe</OutputFile>
+			<OutputFile>$(OutDir)vector_lengthvs2010.exe</OutputFile>
 			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 			<SubSystem>Console</SubSystem>
 			<GenerateDebugInformation>false</GenerateDebugInformation>
@@ -105,6 +105,7 @@
 		<ClInclude Include="expression_template.hpp" />
 		<ClInclude Include="expression_template_simd.hpp" />
 		<ClInclude Include="naive_implementation.hpp" />
+		<ClInclude Include="neon_array.hpp" />
 		<ClInclude Include="performance_test.hpp" />
 		<ClInclude Include="sse_array.hpp" />
 		<ClInclude Include="timer.hpp" />

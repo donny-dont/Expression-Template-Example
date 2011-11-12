@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 11
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dot_product_vs2011", "dot_product_vs2011.vcxproj", "{C44C9CE6-087E-4048-85D8-53A24232612A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vector_length_vs2011", "vector_length_vs2011.vcxproj", "{81387E4C-60BB-594F-A5F9-5179EFC8F9E6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|Win32 = Debug|Win32
+		Release|ARM = Release|ARM
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81387E4C-60BB-594F-A5F9-5179EFC8F9E6}.Debug|ARM.ActiveCfg = Debug|ARM
+		{81387E4C-60BB-594F-A5F9-5179EFC8F9E6}.Debug|ARM.Build.0 = Debug|ARM
+		{81387E4C-60BB-594F-A5F9-5179EFC8F9E6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{81387E4C-60BB-594F-A5F9-5179EFC8F9E6}.Debug|Win32.Build.0 = Debug|Win32
+		{81387E4C-60BB-594F-A5F9-5179EFC8F9E6}.Release|ARM.ActiveCfg = Release|ARM
+		{81387E4C-60BB-594F-A5F9-5179EFC8F9E6}.Release|ARM.Build.0 = Release|ARM
+		{81387E4C-60BB-594F-A5F9-5179EFC8F9E6}.Release|Win32.ActiveCfg = Release|Win32
+		{81387E4C-60BB-594F-A5F9-5179EFC8F9E6}.Release|Win32.Build.0 = Release|Win32
+		{C44C9CE6-087E-4048-85D8-53A24232612A}.Debug|ARM.ActiveCfg = Debug|ARM
+		{C44C9CE6-087E-4048-85D8-53A24232612A}.Debug|ARM.Build.0 = Debug|ARM
+		{C44C9CE6-087E-4048-85D8-53A24232612A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C44C9CE6-087E-4048-85D8-53A24232612A}.Debug|Win32.Build.0 = Debug|Win32
+		{C44C9CE6-087E-4048-85D8-53A24232612A}.Release|ARM.ActiveCfg = Release|ARM
+		{C44C9CE6-087E-4048-85D8-53A24232612A}.Release|ARM.Build.0 = Release|ARM
+		{C44C9CE6-087E-4048-85D8-53A24232612A}.Release|Win32.ActiveCfg = Release|Win32
+		{C44C9CE6-087E-4048-85D8-53A24232612A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,4 +1,4 @@
-solution "expression"
+solution ("expression_" .. _ACTION)
 	configurations { "Debug", "Release" }
 	
 	configuration "Debug"
@@ -10,7 +10,7 @@ solution "expression"
 		flags { "Optimize" }
 
 	-- Vector dot product project
-	project "dot_product"
+	project ("dot_product_" .. _ACTION)
 		language "C++"
 		kind "ConsoleApp"
 		files 
@@ -25,7 +25,7 @@ solution "expression"
 		}
 
 	-- Vector length project
-	project "vector_length"
+	project ("vector_length_" .. _ACTION)
 		language "C++"
 		kind "ConsoleApp"
 		files 

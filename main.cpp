@@ -14,10 +14,12 @@ int main(int argc, char *argv[])
 	double accum_float_arrays_time        = 0.0;
 	double accum_sse_arrays_time          = 0.0;
 	double accum_avx_arrays_time          = 0.0;
+	double accum_neon_arrays_time         = 0.0;
 	double accum_naive_array_time         = 0.0;
 	double accum_expr_template_float_time = 0.0;
 	double accum_expr_template_sse_time   = 0.0;
 	double accum_expr_template_avx_time   = 0.0;
+	double accum_expr_template_neon_time  = 0.0;
 
 	// Get the size of the arrays and the
 	// number of repetitions
@@ -41,12 +43,14 @@ int main(int argc, char *argv[])
 		accum_float_arrays_time     += time_float_arrays(size);
 		accum_sse_arrays_time       += time_sse_arrays(size);
 		accum_avx_arrays_time       += time_avx_arrays(size);
+		accum_neon_arrays_time      += time_neon_arrays(size);
 
 		// valarray implementations
 		accum_naive_array_time          += time_naive_array(size);
 		accum_expr_template_float_time  += time_expr_template_float(size);
 		accum_expr_template_sse_time    += time_expr_template_sse(size);
 		accum_expr_template_avx_time    += time_expr_template_avx(size);
+		accum_expr_template_neon_time   += time_expr_template_neon(size);
 	}
 
 	// Print out results
@@ -60,10 +64,12 @@ int main(int argc, char *argv[])
 	std::cout << "   Float array time: " << accum_float_arrays_time        << " secs\n";
 	std::cout << "     SSE array time: " << accum_sse_arrays_time          << " secs\n";
 	std::cout << "     AVX array time: " << accum_avx_arrays_time          << " secs\n";
+	std::cout << "    NEON array time: " << accum_neon_arrays_time         << " secs\n";
 	std::cout << "Naive valarray time: " << accum_naive_array_time         << " secs\n";
 	std::cout << "Float valarray time: " << accum_expr_template_float_time << " secs\n";
 	std::cout << "  SSE valarray time: " << accum_expr_template_sse_time   << " secs\n";
 	std::cout << "  AVX valarray time: " << accum_expr_template_avx_time   << " secs\n";
+	std::cout << " NEON valarray time: " << accum_expr_template_neon_time  << " secs\n";
 
 	// Print out average times
 	std::cout << "\nAverage times\n";
@@ -71,10 +77,12 @@ int main(int argc, char *argv[])
 	std::cout << "   Float array time: " << accum_float_arrays_time        / repeat << " secs\n";
 	std::cout << "     SSE array time: " << accum_sse_arrays_time          / repeat << " secs\n";
 	std::cout << "     AVX array time: " << accum_avx_arrays_time          / repeat << " secs\n";
+	std::cout << "    NEON array time: " << accum_neon_arrays_time         / repeat << " secs\n";
 	std::cout << "Naive valarray time: " << accum_naive_array_time         / repeat << " secs\n";
 	std::cout << "Float valarray time: " << accum_expr_template_float_time / repeat << " secs\n";
 	std::cout << "  SSE valarray time: " << accum_expr_template_sse_time   / repeat << " secs\n";
 	std::cout << "  AVX valarray time: " << accum_expr_template_avx_time   / repeat << " secs\n";
+	std::cout << " NEON valarray time: " << accum_expr_template_neon_time  / repeat << " secs\n";
 
 	// Terminate the timer
 	system_time::terminate();

@@ -3,8 +3,9 @@
 /ipch
 *.exe
 *.sdf
-*.filters
 *.user
 *.suo
 *.opensdf
 *.tmp
+*.ilk
+*.pdb
